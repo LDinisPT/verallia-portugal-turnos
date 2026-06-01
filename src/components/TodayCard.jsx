@@ -1,4 +1,4 @@
-import { getShift } from "../data/schedule-data";
+import { getShift, getHoliday } from "../data/schedule-data";
 
 const shiftInfo = {
   M: {
@@ -39,12 +39,12 @@ function formatDate(date) {
 export default function TodayCard({ team }) {
   const today = new Date();
 
-  const shift = getShift(
-    team,
-    today.getFullYear(),
-    today.getMonth() + 1,
-    today.getDate()
-  );
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
+  const shift = getShift(team, year, month, day);
+  const holiday = getHoliday(year, month, day);
 
   const info = shiftInfo[shift] || shiftInfo.F;
 
@@ -54,14 +54,25 @@ export default function TodayCard({ team }) {
         margin: "20px",
         padding: "24px",
         borderRadius: "16px",
-        background: "#1e293b",
+        background: holiday ? "#92400e" : "#1e293b",
         color: "white",
         textAlign: "center",
+        border: holiday ? "2px solid #fbbf24" : "none",
       }}
     >
-      <p style={{ color: "#94a3b8" }}>
-        {formatDate(today)}
-      </p>
+      <p style={{ color: "#cbd5e1" }}>{formatDate(today)}</p>
+
+      {holiday && (
+        <p
+          style={{
+            color: "#fde68a",
+            fontWeight: "bold",
+            marginTop: "10px",
+          }}
+        >
+          ⭐ {holiday}
+        </p>
+      )}
 
       <h2>Hoje</h2>
 
@@ -71,9 +82,7 @@ export default function TodayCard({ team }) {
         {info.emoji}
       </div>
 
-      <h1 style={{ margin: "5px 0" }}>
-        {info.code}
-      </h1>
+      <h1 style={{ margin: "5px 0" }}>{info.code}</h1>
 
       <h2>{info.label}</h2>
 

@@ -43,10 +43,13 @@ export default function CalendarView({ team }) {
 
     cells.push(
       <div
-        key={day}
-        style={{
-          background: info.color,
-          borderRadius: "10px",
+  key={day}
+  title={holiday || ""}
+  style={{
+
+          background: holiday ? "#d97706" : info.color,
+border: holiday ? "2px solid #fbbf24" : "none",
+borderRadius: "10px",
           padding: "10px",
           minHeight: "55px",
           color: "white",
