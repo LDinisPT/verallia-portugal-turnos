@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import InstallApp from "./components/InstallApp";
 import Header from "./components/Header";
 import TeamSelector from "./components/TeamSelector";
 import TodayCard from "./components/TodayCard";
@@ -26,7 +26,7 @@ export default function App() {
       />
 
       <TodayCard team={team} />
-
+      <InstallApp />
       <DateSearch />
 
       <CalendarView team={team} />
