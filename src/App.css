@@ -1,0 +1,23 @@
+import { useState } from "react";
+
+import Header from "./components/Header";
+import TeamSelector from "./components/TeamSelector";
+
+export default function App() {
+  const [team, setTeam] = useState("A");
+
+  return (
+    <div>
+      <Header />
+
+      <TeamSelector
+        team={team}
+        setTeam={setTeam}
+      />
+
+      <h2 style={{ padding: "20px" }}>
+        Equipa selecionada: {team}
+      </h2>
+    </div>
+  );
+}
