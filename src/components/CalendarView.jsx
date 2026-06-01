@@ -10,6 +10,7 @@ const shiftInfo = {
 
 export default function CalendarView({ team }) {
   const [date, setDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -44,6 +45,13 @@ export default function CalendarView({ team }) {
     cells.push(
       <div
   key={day}
+   onClick={() =>
+    setSelectedDay({
+      day,
+      shift: info.label,
+      holiday,
+    })
+  }
   title={holiday || ""}
   style={{
 
@@ -110,7 +118,31 @@ borderRadius: "10px",
 
         {cells}
       </div>
+{selectedDay && (
+  <div
+    style={{
+      marginTop: "20px",
+      padding: "15px",
+      borderRadius: "10px",
+      background: "#0f172a",
+      border: "1px solid #334155",
+    }}
+  >
+    <strong>
+      {selectedDay.day}/{month + 1}/{year}
+    </strong>
 
+    {selectedDay.holiday && (
+      <div style={{ color: "#fbbf24", marginTop: "8px" }}>
+        ⭐ {selectedDay.holiday}
+      </div>
+    )}
+
+    <div style={{ marginTop: "8px" }}>
+      Turno: {selectedDay.shift || "Folga"}
+    </div>
+  </div>
+)}
       <p style={{ marginTop: "15px" }}>
         🟦 Manhã &nbsp; 🟩 Tarde &nbsp; 🟪 Noite &nbsp; ⬛ Folga
       </p>
