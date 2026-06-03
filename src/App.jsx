@@ -1,3 +1,5 @@
+import NextCycle from "./components/NextCycle";
+import NextDays from "./components/NextDays";
 import { useState } from "react";
 import InstallApp from "./components/InstallApp";
 import Header from "./components/Header";
@@ -26,6 +28,8 @@ export default function App() {
       />
 
       <TodayCard team={team} />
+      <NextDays team={team} />
+      <NextCycle team={team} />
       <InstallApp />
       <DateSearch />
 
