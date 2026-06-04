@@ -1,0 +1,24 @@
+COMANDOS VERALLIA PORTUGAL TURNOS
+
+# Entrar na pasta do projeto
+cd C:\Users\luisd\Projetos\verallia-portugal-turnos
+
+# Arrancar localhost
+npm run dev
+
+# Guardar alterações no GitHub e atualizar Vercel
+git add .
+git commit -m "descricao da alteracao"
+git push
+
+# Instalar dependências
+npm install
+
+# Criar build
+npm run build
+
+# Ver estado do Git
+git status
+
+# Ver ficheiros da pasta
+dir

@@ -1,3 +1,4 @@
+import DashboardCards from "./components/DashboardCards";
 import Stats from "./components/Stats";
 import NextQuinzena from "./components/NextQuinzena";
 import NextDays from "./components/NextDays";
@@ -27,8 +28,7 @@ export default function App() {
         team={team}
         setTeam={setTeam}
       />
-
-      <TodayCard team={team} />
+      <DashboardCards team={team} />
       <NextDays team={team} />
       <NextQuinzena team={team} />
       <Stats team={team} />
