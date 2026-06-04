@@ -7,127 +7,160 @@ const colors = {
   F: "#334155",
 };
 
-function getCircleSegment(percent, offset) {
-  const circumference = 2 * Math.PI * 45;
+const labels = {
+  M: "Manhã",
+  T: "Tarde",
+  N: "Noite",
+  F: "Folgas",
+};
 
-  return {
-    strokeDasharray: `${percent * circumference} ${circumference}`,
-    strokeDashoffset: -offset * circumference,
-  };
-}
+const emojis = {
+  M: "🟦",
+  T: "🟩",
+  N: "🟪",
+  F: "⬛",
+};
 
 export default function Stats({ team }) {
+  const stats = { M: 0, T: 0, N: 0, F: 0 };
   const year = 2026;
 
-  const stats = {
-    M: 0,
-    T: 0,
-    N: 0,
-    F: 0,
-  };
+  for (let month = 1; month <= 12; month++) {
+    const daysInMonth = new Date(year, month, 0).getDate();
 
-  const start = new Date(year, 0, 1);
-  const end = new Date(year, 11, 31);
-
-  for (
-    let date = new Date(start);
-    date <= end;
-    date.setDate(date.getDate() + 1)
-  ) {
-    const shift = getShift(
-      team,
-      date.getFullYear(),
-      date.getMonth() + 1,
-      date.getDate()
-    );
-
-    stats[shift] = (stats[shift] || 0) + 1;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const shift = getShift(team, year, month, day);
+      if (stats[shift] !== undefined) stats[shift]++;
+    }
   }
 
   const total = stats.M + stats.T + stats.N + stats.F;
-
-  const values = [
-    { key: "M", label: "Manhã", emoji: "🟦", value: stats.M },
-    { key: "T", label: "Tarde", emoji: "🟩", value: stats.T },
-    { key: "N", label: "Noite", emoji: "🟪", value: stats.N },
-    { key: "F", label: "Folgas", emoji: "⬛", value: stats.F },
-  ];
+  const radius = 42;
+  const circumference = 2 * Math.PI * radius;
 
   let offset = 0;
+
+  const items = ["M", "T", "N", "F"].map((key) => {
+    const value = stats[key];
+    const percent = value / total;
+    const dash = `${percent * circumference} ${circumference}`;
+    const dashOffset = -offset * circumference;
+
+    offset += percent;
+
+    return { key, value, percent, dash, dashOffset };
+  });
 
   return (
     <div
       style={{
         margin: "20px",
-        padding: "20px",
-        borderRadius: "12px",
+        padding: "22px",
+        borderRadius: "20px",
         background: "#1e293b",
         color: "white",
-        textAlign: "center",
       }}
     >
-      <h2>Estatísticas 2026</h2>
+      <h2 style={{ textAlign: "center" }}>Estatísticas 2026</h2>
 
-      <p>Equipa {team}</p>
+      <p style={{ textAlign: "center", opacity: 0.75 }}>
+        Equipa {team}
+      </p>
 
-      <svg width="180" height="180" viewBox="0 0 100 100">
-        {values.map((item) => {
-          const percent = item.value / total;
-
-          const segment = getCircleSegment(percent, offset);
-
-          offset += percent;
-
-          return (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "220px 1fr",
+          gap: "20px",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <svg width="220" height="220" viewBox="0 0 100 100">
             <circle
-              key={item.key}
               cx="50"
               cy="50"
-              r="45"
-              fill="transparent"
-              stroke={colors[item.key]}
-              strokeWidth="10"
-              transform="rotate(-90 50 50)"
-              {...segment}
+              r={radius}
+              fill="none"
+              stroke="#0f172a"
+              strokeWidth="12"
             />
-          );
-        })}
 
-        <circle
-          cx="50"
-          cy="50"
-          r="30"
-          fill="#1e293b"
-        />
+            {items.map((item) => (
+              <circle
+                key={item.key}
+                cx="50"
+                cy="50"
+                r={radius}
+                fill="none"
+                stroke={colors[item.key]}
+                strokeWidth="12"
+                strokeDasharray={item.dash}
+                strokeDashoffset={item.dashOffset}
+                transform="rotate(-90 50 50)"
+              />
+            ))}
 
-        <text
-          x="50"
-          y="48"
-          textAnchor="middle"
-          fill="white"
-          fontSize="8"
+            <circle cx="50" cy="50" r="28" fill="#1e293b" />
+
+            <text
+              x="50"
+              y="48"
+              textAnchor="middle"
+              fill="white"
+              fontSize="12"
+              fontWeight="bold"
+            >
+              {total}
+            </text>
+
+            <text
+              x="50"
+              y="60"
+              textAnchor="middle"
+              fill="#94a3b8"
+              fontSize="7"
+            >
+              dias
+            </text>
+          </svg>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+            gap: "12px",
+          }}
         >
-          {total}
-        </text>
+          {items.map((item) => (
+            <div
+              key={item.key}
+              style={{
+                background: "#0f172a",
+                borderRadius: "16px",
+                padding: "16px",
+                borderLeft: `5px solid ${colors[item.key]}`,
+              }}
+            >
+              <div>{emojis[item.key]} {labels[item.key]}</div>
 
-        <text
-          x="50"
-          y="58"
-          textAnchor="middle"
-          fill="#94a3b8"
-          fontSize="6"
-        >
-          dias
-        </text>
-      </svg>
+              <div
+                style={{
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  marginTop: "8px",
+                }}
+              >
+                {item.value}
+              </div>
 
-      <div style={{ marginTop: "15px", textAlign: "left" }}>
-        {values.map((item) => (
-          <p key={item.key}>
-            {item.emoji} {item.label}:{" "}
-            <strong>{item.value}</strong>
-          </p>
-        ))}
+              <div style={{ opacity: 0.7 }}>
+                {Math.round(item.percent * 100)}%
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

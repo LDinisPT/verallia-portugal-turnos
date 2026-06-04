@@ -1,5 +1,5 @@
-import DashboardCards from "./components/DashboardCards";
 import Stats from "./components/Stats";
+import DashboardCards from "./components/DashboardCards";
 import NextQuinzena from "./components/NextQuinzena";
 import NextDays from "./components/NextDays";
 import { useState } from "react";
@@ -30,6 +30,7 @@ export default function App() {
       />
       <DashboardCards team={team} />
       <NextDays team={team} />
+      <Stats team={team} />
       <NextQuinzena team={team} />
       <Stats team={team} />
       <InstallApp />
