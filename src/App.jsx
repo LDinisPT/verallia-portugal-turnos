@@ -1,17 +1,19 @@
-import Stats from "./components/Stats";
-import DashboardCards from "./components/DashboardCards";
-import NextQuinzena from "./components/NextQuinzena";
-import NextDays from "./components/NextDays";
 import { useState } from "react";
-import InstallApp from "./components/InstallApp";
+
 import Header from "./components/Header";
 import TeamSelector from "./components/TeamSelector";
-import TodayCard from "./components/TodayCard";
+import DashboardCards from "./components/DashboardCards";
+import InstallApp from "./components/InstallApp";
 import DateSearch from "./components/DateSearch";
 import CalendarView from "./components/CalendarView";
+import NextDays from "./components/NextDays";
+import Stats from "./components/Stats";
+import NextQuinzena from "./components/NextQuinzena";
+import BottomNav from "./components/BottomNav";
 
 export default function App() {
-  const savedTeam = localStorage.getItem("verallia-team") || "A";
+  const savedTeam =
+    localStorage.getItem("verallia-team") || "A";
 
   const [team, setTeamState] = useState(savedTeam);
 
@@ -21,22 +23,29 @@ export default function App() {
   }
 
   return (
-    <div>
+    <div style={{ paddingBottom: "90px" }}>
       <Header />
 
       <TeamSelector
         team={team}
         setTeam={setTeam}
       />
+
       <DashboardCards team={team} />
-      <NextDays team={team} />
-      <Stats team={team} />
-      <NextQuinzena team={team} />
-      <Stats team={team} />
+
       <InstallApp />
+
       <DateSearch />
 
+      <NextDays team={team} />
+
+      <Stats team={team} />
+
+      <NextQuinzena team={team} />
+
       <CalendarView team={team} />
+
+      <BottomNav />
     </div>
   );
 }

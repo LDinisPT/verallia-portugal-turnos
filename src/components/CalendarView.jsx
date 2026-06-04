@@ -10,7 +10,6 @@ const shiftInfo = {
 
 export default function CalendarView({ team }) {
   const [date, setDate] = useState(new Date());
-  const [selectedDay, setSelectedDay] = useState(null);
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -31,6 +30,10 @@ export default function CalendarView({ team }) {
     setDate(new Date(year, month + 1, 1));
   }
 
+  function goToday() {
+    setDate(new Date());
+  }
+
   const cells = [];
 
   for (let i = 0; i < firstWeekDay; i++) {
@@ -44,41 +47,42 @@ export default function CalendarView({ team }) {
 
     cells.push(
       <div
-  key={day}
-   onClick={() =>
-    setSelectedDay({
-      day,
-      shift: info.label,
-      holiday,
-    })
-  }
-  title={holiday || ""}
-  style={{
-
-          background: holiday ? "#d97706" : info.color,
-border: holiday ? "2px solid #fbbf24" : "none",
-borderRadius: "10px",
+        key={day}
+        style={{
+          background: holiday ? "#924f1d" : info.color,
+          borderRadius: "14px",
           padding: "10px",
-          minHeight: "55px",
+          minHeight: "70px",
           color: "white",
           textAlign: "center",
+          border: holiday ? "2px solid #facc15" : "none",
+          transition: "0.2s",
         }}
       >
-    <strong>{day}</strong>
-<br />
-<span>{info.label}</span>
+        <strong style={{ fontSize: "24px" }}>{day}</strong>
 
-{holiday && (
-  <div
-    style={{
-      fontSize: "10px",
-      marginTop: "4px",
-      color: "#fef3c7"
-    }}
-  >
-    ⭐
-  </div>
-)}
+        <br />
+
+        <span style={{ fontSize: "28px" }}>
+          {shift}
+        </span>
+
+        <br />
+
+        <span>{info.label}</span>
+
+        {holiday && (
+          <div
+            style={{
+              fontSize: "11px",
+              marginTop: "6px",
+              color: "#fde68a",
+              fontWeight: "bold",
+            }}
+          >
+            ⭐
+          </div>
+        )}
       </div>
     );
   }
@@ -88,23 +92,85 @@ borderRadius: "10px",
       style={{
         margin: "20px",
         padding: "20px",
-        borderRadius: "12px",
+        borderRadius: "20px",
         background: "#1e293b",
+        color: "white",
       }}
     >
-      <h2>Calendário</h2>
+      <h2
+        style={{
+          textAlign: "center",
+          marginBottom: "20px",
+        }}
+      >
+        Calendário
+      </h2>
 
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <button onClick={previousMonth}>←</button>
-        <strong style={{ textTransform: "capitalize" }}>{monthName}</strong>
-        <button onClick={nextMonth}>→</button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <button
+          onClick={previousMonth}
+          style={{
+            padding: "10px 14px",
+            borderRadius: "10px",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          ←
+        </button>
+
+        <div style={{ textAlign: "center" }}>
+          <strong
+            style={{
+              textTransform: "capitalize",
+              fontSize: "30px",
+            }}
+          >
+            {monthName}
+          </strong>
+
+          <br />
+
+          <button
+            onClick={goToday}
+            style={{
+              marginTop: "10px",
+              padding: "8px 18px",
+              borderRadius: "999px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          >
+            Hoje
+          </button>
+        </div>
+
+        <button
+          onClick={nextMonth}
+          style={{
+            padding: "10px 14px",
+            borderRadius: "10px",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          →
+        </button>
       </div>
 
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(7, 1fr)",
-          gap: "6px",
+          gap: "8px",
           marginTop: "15px",
         }}
       >
@@ -118,32 +184,14 @@ borderRadius: "10px",
 
         {cells}
       </div>
-{selectedDay && (
-  <div
-    style={{
-      marginTop: "20px",
-      padding: "15px",
-      borderRadius: "10px",
-      background: "#0f172a",
-      border: "1px solid #334155",
-    }}
-  >
-    <strong>
-      {selectedDay.day}/{month + 1}/{year}
-    </strong>
 
-    {selectedDay.holiday && (
-      <div style={{ color: "#fbbf24", marginTop: "8px" }}>
-        ⭐ {selectedDay.holiday}
-      </div>
-    )}
-
-    <div style={{ marginTop: "8px" }}>
-      Turno: {selectedDay.shift || "Folga"}
-    </div>
-  </div>
-)}
-      <p style={{ marginTop: "15px" }}>
+      <p
+        style={{
+          marginTop: "20px",
+          textAlign: "center",
+          opacity: 0.8,
+        }}
+      >
         🟦 Manhã &nbsp; 🟩 Tarde &nbsp; 🟪 Noite &nbsp; ⬛ Folga
       </p>
     </div>
